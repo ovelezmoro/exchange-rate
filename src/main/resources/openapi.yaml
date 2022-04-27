@@ -1,0 +1,151 @@
+openapi: 3.0.1
+info:
+  title: Reto Tecnico Exchange Rate
+  description: |
+    Esta API permite realizar un tipo de cambio a un monto donde se deben utilizar el monto, moneda de origen, moneda de destino, monto con el tipo de campo y el tipo de cambio.
+    
+    Permite el registro, actualización y búsqueda del tipo de cambio.
+    
+    Por cada tipo de cambio realizado, contiene quien hizo la solicitud (auditoría funcional)
+
+  contact:
+    email: o.velezmoro@gmail.com.io
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/system-development/v1
+tags:
+  - name: ExchangeRate
+    description: Tipo de Cambio
+paths:
+  /exchangeRate/:
+    get:
+      tags:
+        - ExchangeRate
+      summary: Búsqueda del tipo de cambio.
+      operationId: findExchangeRateGET
+      parameters:
+        - name: from
+          in: query
+          description: Moneda Origen
+          required: true
+          schema:
+            type: string
+            example: 'USD'
+        - name: to
+          in: query
+          description: Moneda Destino
+          required: true
+          schema:
+            type: string
+            example: 'PEN'
+      responses:
+        200:
+          description: Se obtuvó el recurso solicitado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EchangeRateResponse"
+      security:
+        - bearerAuth: []
+  /exchangeRate/convert:
+    post:
+      tags:
+        - ExchangeRate
+      summary: Convierte el tipo de cambio de un monto.
+      operationId: convertExchangeRatePOST
+      requestBody:
+        description: Petición del recurso
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertExchangeRateRequest'
+      responses:
+        200:
+          description: Se obtuvó el recurso solicitado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoryEchangeRateResponse"
+  /exchangeRate/history:
+    get:
+      tags:
+        - ExchangeRate
+      summary: Búsqueda el historial de un tipo de cambio.
+      operationId: findHistoryExchangeRateGET
+      parameters:
+        - name: date
+          in: query
+          description: Fecha del tipo de cambio
+          required: true
+          schema:
+            type: string
+            example: '2022-04-26'
+        - name: from
+          in: query
+          description: Moneda Origen
+          required: true
+          schema:
+            type: string
+            example: 'USD'
+      responses:
+        200:
+          description: Se obtuvó el recurso solicitado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoryEchangeRateResponse"
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    HistoryEchangeRateResponse:
+      type: object
+      properties:
+        base:
+          type: string
+          description: Moneda Origen.
+          example: "USD"
+        amount:
+          type: number
+          description: Monto a transformar
+        result:
+          type: object
+          description: Resultado de Monedas con su ratio de tipo de cambio.
+          additionalProperties:
+            type: object
+    EchangeRateResponse:
+      type: object
+      properties:
+        base:
+          type: string
+          description: Moneda Origen.
+          example: "USD"
+        result:
+          type: object
+          description: Resultado de Monedas con su ratio de tipo de cambio.
+          additionalProperties:
+            type: object
+        updated:
+          type: string
+          description: Fecha en que se realizo la consulta.
+          example: "2022-04-27 02:31:41"
+    ConvertExchangeRateRequest:
+      type: object
+      properties:
+        base:
+          type: string
+          description: Moneda Origen.
+          example: "USD"
+        amount:
+          type: number
+          description: Monto a transformar
+        result:
+          type: object
+          description: Resultado de Monedas con su ratio de tipo de cambio.
+          additionalProperties:
+            type: object
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
