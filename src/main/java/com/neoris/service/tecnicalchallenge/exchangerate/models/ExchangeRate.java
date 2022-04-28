@@ -1,26 +1,27 @@
 package com.neoris.service.tecnicalchallenge.exchangerate.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
-@Data
+@Setter
+@Getter
+@ToString
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "exchange_rate")
-public class ExchangeRate implements Serializable {
+public class ExchangeRate {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @NotNull
+    private String day;
     @NotNull
     private String baseCurrency;
     @NotNull

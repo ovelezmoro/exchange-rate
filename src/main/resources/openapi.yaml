@@ -22,7 +22,7 @@ paths:
       tags:
         - ExchangeRate
       summary: Búsqueda del tipo de cambio.
-      operationId: findExchangeRateGET
+      operationId: exchangeRateGET
       parameters:
         - name: from
           in: query
@@ -44,9 +44,45 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EchangeRateResponse"
+                $ref: "#/components/schemas/ExchangeRateResponse"
       security:
         - bearerAuth: []
+    post:
+      tags:
+        - ExchangeRate
+      summary: Inserta un nuevo tipo de cambio
+      operationId: createExchangeRatePOST
+      requestBody:
+        description: Petición del recurso
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateRequest'
+      responses:
+        201:
+          description: Se creo el recurso solicitado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeRateResponse"
+    put:
+      tags:
+        - ExchangeRate
+      summary: Actualiza un nuevo tipo de cambio
+      operationId: updateExchangeRatePOST
+      requestBody:
+        description: Petición del recurso
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateRequest'
+      responses:
+        201:
+          description: Se actualizo el recurso solicitado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeRateResponse"
   /exchangeRate/convert:
     post:
       tags:
@@ -65,13 +101,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HistoryEchangeRateResponse"
+                $ref: "#/components/schemas/ConvertExchangeRateResponse"
   /exchangeRate/history:
     get:
       tags:
         - ExchangeRate
       summary: Búsqueda el historial de un tipo de cambio.
-      operationId: findHistoryExchangeRateGET
+      operationId: historyExchangeRateGET
       parameters:
         - name: date
           in: query
@@ -93,27 +129,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HistoryEchangeRateResponse"
+                $ref: "#/components/schemas/HistoryExchangeRateResponse"
       security:
         - bearerAuth: []
 components:
   schemas:
-    HistoryEchangeRateResponse:
+    ExchangeRateRequest:
+      $ref: "#/components/schemas/ExchangeRate"
+    ExchangeRate:
       type: object
       properties:
-        base:
+        currencyCode:
           type: string
-          description: Moneda Origen.
-          example: "USD"
+          description: Código de Moneda.
+          example: "PEN"
         amount:
           type: number
-          description: Monto a transformar
-        result:
-          type: object
-          description: Resultado de Monedas con su ratio de tipo de cambio.
-          additionalProperties:
-            type: object
-    EchangeRateResponse:
+          format: double
+          description: Tipo de cambio de la moneda.
+    ExchangeRateResponse:
       type: object
       properties:
         base:
@@ -121,10 +155,24 @@ components:
           description: Moneda Origen.
           example: "USD"
         result:
-          type: object
           description: Resultado de Monedas con su ratio de tipo de cambio.
-          additionalProperties:
-            type: object
+          $ref: "#/components/schemas/ExchangeRate"
+        updated:
+          type: string
+          description: Fecha en que se realizo la consulta.
+          example: "2022-04-27 02:31:41"
+    HistoryExchangeRateResponse:
+      type: object
+      properties:
+        base:
+          type: string
+          description: Moneda Origen.
+          example: "USD"
+        result:
+          type: array
+          description: Resultado de Monedas con su ratio de tipo de cambio.
+          items:
+            $ref: "#/components/schemas/ExchangeRate"
         updated:
           type: string
           description: Fecha en que se realizo la consulta.
@@ -132,18 +180,41 @@ components:
     ConvertExchangeRateRequest:
       type: object
       properties:
+        from:
+          type: string
+          description: Moneda Origen.
+          example: "USD"
+        to:
+          type: string
+          description: Moneda Destino
+          example: "PEN"
+        amount:
+          type: number
+          format: double
+          description: Monto a transformar
+          example: 35.5
+    ConvertExchangeRateResponse:
+      type: object
+      properties:
         base:
           type: string
           description: Moneda Origen.
           example: "USD"
         amount:
           type: number
+          format: double
           description: Monto a transformar
+          example: 35.5
         result:
           type: object
-          description: Resultado de Monedas con su ratio de tipo de cambio.
+          description: Moneda Destino
           additionalProperties:
-            type: object
+            type: number
+            format: double
+        updated:
+          type: string
+          description: Fecha en que se realizo la consulta.
+          example: "2022-04-27 02:31:41"
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
       type: http
