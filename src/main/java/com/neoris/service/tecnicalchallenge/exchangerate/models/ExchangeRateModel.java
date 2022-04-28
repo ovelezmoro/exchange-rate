@@ -17,7 +17,7 @@ import java.util.Date;
 public class ExchangeRateModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotNull
     private String day;

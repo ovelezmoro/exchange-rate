@@ -16,6 +16,8 @@ servers:
 tags:
   - name: ExchangeRate
     description: Tipo de Cambio
+  - name: User
+    description: Usuarios
 paths:
   /exchangeRate/:
     get:
@@ -132,8 +134,92 @@ paths:
                 $ref: "#/components/schemas/HistoryExchangeRateResponse"
       security:
         - bearerAuth: []
+  /user:
+    post:
+      tags:
+        - User
+      summary: "Crear usuario"
+      description: "Esto solo lo puede hacer el usuario registrado."
+      operationId: "createUserPOST"
+      requestBody:
+        description: Petición del recurso
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        201:
+          description: Se registro el recurso solicitado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+  /user/login:
+    post:
+      tags:
+        - User
+      summary: "Ingresar el usuario al sistema"
+      description: ""
+      operationId: "loginUser"
+      requestBody:
+        description: Petición del recurso
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        201:
+          description: Se registro el recurso solicitado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
 components:
   schemas:
+    AuthRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email del usuario
+          example: "o.velezmoro@gmail.com"
+        password:
+          type: string
+          description: Contraseña del usuario
+          example: "12345"
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token
+          example: "asdadsasdas"
+    UserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre del usuario
+          example: "Osmar Velezmoro"
+        email:
+          type: string
+          description: Email del usuario
+          example: "o.velezmoro@gmail.com"
+        password:
+          type: string
+          description: Contraseña del usuario
+          example: "12345"
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje del sistema
+          example: "Usuario registrado exitosamente"
+        update:
+          type: string
+          description: Fecha de ejecución de la operació
+          example: "2022-04-27 02:31:41"
     ExchangeRateRequest:
       type: object
       properties:
