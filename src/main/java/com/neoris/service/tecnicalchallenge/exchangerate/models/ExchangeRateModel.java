@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.Date;
 
 @Setter
@@ -15,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "exchange_rate")
-public class ExchangeRate {
+public class ExchangeRateModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

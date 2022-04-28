@@ -1,5 +1,6 @@
 package com.neoris.service.tecnicalchallenge.util;
 
+import javax.validation.constraints.NotNull;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,13 +13,12 @@ public class ExchangeRateUtil {
     public static String HRS_FORMAT_DATE = "dd/MM/yyyy HH:mm:ss";
     public static String DB_FORMAT_DATE = "ddMMyyyy";
 
-    public static String dateToString(Date date, String format) {
-        assert format != null;
+    public static String dateToString(Date date, @NotNull String format) {
         DateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(date);
     }
 
-    public static Date stringToDate(String date, String format) {
+    public static Date stringToDate(String date, @NotNull String format) {
         assert format != null;
         try {
             return new SimpleDateFormat(format).parse(date);
@@ -26,5 +26,6 @@ public class ExchangeRateUtil {
             return null;
         }
     }
+
 
 }

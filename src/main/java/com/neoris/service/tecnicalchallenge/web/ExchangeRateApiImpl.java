@@ -18,16 +18,26 @@ public class ExchangeRateApiImpl implements ExchangeRateApiDelegate {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
+    @Override
+    public Mono<ResponseEntity<ExchangeRateResponse>> createExchangeRatePOST(Mono<ExchangeRateRequest> exchangeRateRequest, ServerWebExchange exchange) {
+        return exchangeRateService.create(exchangeRateRequest)
+                .map(ResponseEntity::ok)
+                .onErrorReturn(ResponseEntity.internalServerError().build())
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
 
     @Override
-    public Mono<ResponseEntity<ExchangeRateResponse>> createExchangeRatePOST(Mono<ExchangeRate> body, ServerWebExchange exchange) {
-        return ExchangeRateApiDelegate.super.createExchangeRatePOST(body, exchange);
+    public Mono<ResponseEntity<ExchangeRateResponse>> updateExchangeRatePOST(Mono<ExchangeRateRequest> exchangeRateRequest, ServerWebExchange exchange) {
+        return exchangeRateService.update(exchangeRateRequest)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @Override
     public Mono<ResponseEntity<ExchangeRateResponse>> exchangeRateGET(String from, String to, ServerWebExchange exchange) {
         return exchangeRateService.find(from, to)
-                .flatMap(exchangeRateResponse -> Mono.just(ResponseEntity.ok(exchangeRateResponse)));
+                .flatMap(exchangeRateResponse -> Mono.just(ResponseEntity.ok(exchangeRateResponse)))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @Override
@@ -41,6 +51,7 @@ public class ExchangeRateApiImpl implements ExchangeRateApiDelegate {
     public Mono<ResponseEntity<ConvertExchangeRateResponse>> convertExchangeRatePOST(Mono<ConvertExchangeRateRequest> convertExchangeRateRequest, ServerWebExchange exchange) {
         return convertExchangeRateRequest
                 .flatMap(request -> exchangeRateService.convert(request))
-                .flatMap(convertResponse -> Mono.just(ResponseEntity.ok(convertResponse)));
+                .flatMap(convertResponse -> Mono.just(ResponseEntity.ok(convertResponse)))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 }
