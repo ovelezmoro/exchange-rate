@@ -2,10 +2,6 @@ package com.neoris.service.tecnicalchallenge.web;
 
 
 import com.neoris.service.tecnicalchallenge.api.UserApiDelegate;
-import com.neoris.service.tecnicalchallenge.exchangerate.dto.Role;
-import com.neoris.service.tecnicalchallenge.exchangerate.dto.User;
-import com.neoris.service.tecnicalchallenge.exchangerate.models.RoleModel;
-import com.neoris.service.tecnicalchallenge.exchangerate.models.UserModel;
 import com.neoris.service.tecnicalchallenge.exchangerate.services.UserService;
 import com.neoris.service.tecnicalchallenge.model.AuthRequest;
 import com.neoris.service.tecnicalchallenge.model.AuthResponse;
@@ -17,13 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -41,9 +34,11 @@ public class UserApiImpl implements UserApiDelegate {
                 .map(userDetails -> ResponseEntity.ok(new AuthResponse().token(jwtUtil.generateToken(userDetails))))
                 .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public Mono<ResponseEntity<MessageResponse>> createUserPOST(Mono<UserRequest> userRequest, ServerWebExchange exchange) {
         return UserApiDelegate.super.createUserPOST(userRequest, exchange);
     }
+
+
 }

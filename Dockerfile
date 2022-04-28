@@ -1,8 +1,8 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
 
-ARG APP_NAME="api-exchange-rate"
+ARG APP_NAME="exchange-rate"
 ARG APP_VERSION="0.0.1"
-ARG JAR_FILE="../../target/${APP_NAME}-${APP_VERSION}.jar"
+ARG JAR_FILE="./target/*.jar"
 
 RUN apk add --no-cache tzdata
 ENV TZ='America/Lima'
@@ -20,7 +20,7 @@ WORKDIR /
 
 #Copiamos el jar en el directorio de trabajo
 RUN mkdir application && chmod 777 application
-COPY ../../target/${APP_NAME}-${APP_VERSION}.jar /application/app.jar
+COPY ${JAR_FILE} /application/app.jar
 WORKDIR /application
 
 EXPOSE 8080
