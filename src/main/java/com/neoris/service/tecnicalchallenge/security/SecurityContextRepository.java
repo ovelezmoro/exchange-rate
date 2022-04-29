@@ -1,10 +1,10 @@
-package com.neoris.service.tecnicalchallenge.exchangerate.repositories;
+package com.neoris.service.tecnicalchallenge.security;
 
 import com.google.common.net.HttpHeaders;
-import com.neoris.service.tecnicalchallenge.config.AuthenticationManager;
-import lombok.AllArgsConstructor;
+import com.neoris.service.tecnicalchallenge.util.constants.ExchangeRateConstants;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
@@ -12,25 +12,28 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Component
-@AllArgsConstructor
 public class SecurityContextRepository implements ServerSecurityContextRepository {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
+
 
     @Override
     public Mono<Void> save(ServerWebExchange swe, SecurityContext sc) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Mono.empty();
     }
 
     @Override
-    public Mono<SecurityContext> load(ServerWebExchange swe) {
-        return Mono.justOrEmpty(swe.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+    public Mono<SecurityContext> load(ServerWebExchange exchange) {
+        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(authHeader -> authHeader.startsWith("Bearer "))
                 .flatMap(authHeader -> {
-                    String authToken = authHeader.substring(7);
-                    Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
-                    return this.authenticationManager.authenticate(auth).map(SecurityContextImpl::new);
+                    String authToken = authHeader.replace(ExchangeRateConstants.TOKEN_PREFIX, "");
+                    return authenticationManager
+                            .authenticate(new UsernamePasswordAuthenticationToken(authToken, authToken))
+                            .map(SecurityContextImpl::new);
                 });
     }
 

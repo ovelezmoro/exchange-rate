@@ -7,7 +7,7 @@ import com.neoris.service.tecnicalchallenge.model.AuthRequest;
 import com.neoris.service.tecnicalchallenge.model.AuthResponse;
 import com.neoris.service.tecnicalchallenge.model.MessageResponse;
 import com.neoris.service.tecnicalchallenge.model.UserRequest;
-import com.neoris.service.tecnicalchallenge.util.JWTUtil;
+import com.neoris.service.tecnicalchallenge.security.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,15 +23,17 @@ import reactor.core.publisher.Mono;
 public class UserApiImpl implements UserApiDelegate {
 
     @Autowired
-    private JWTUtil jwtUtil;
-
-    @Autowired
     private UserService userService;
 
     @Override
     public Mono<ResponseEntity<AuthResponse>> loginUser(Mono<AuthRequest> authRequest, ServerWebExchange exchange) {
+
         return authRequest.flatMap(request -> userService.validUser(request))
-                .map(userDetails -> ResponseEntity.ok(new AuthResponse().token(jwtUtil.generateToken(userDetails))))
+                .map(userDetails -> {
+                    String token = JwtUtil.generateToken(userDetails);
+                    AuthResponse response = new AuthResponse().token(token);
+                    return ResponseEntity.ok(response);
+                })
                 .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")

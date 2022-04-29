@@ -30,19 +30,6 @@ public class InitializeDataSourceConfig implements CommandLineRunner {
         exchangeRateRepository.deleteAll();
         log.info("Registrando Data de Prueba");
 
-        /*log.info("===");
-        log.info("admin@mail.com : " + passwordEncoder.encode("admin"));
-        log.info("usere@mail.com : " + passwordEncoder.encode("usere"));
-        log.info("===");*/
-
-        /*
-        UserModel admin = UserModel.builder().email("admin@gmail.com").password("12345").build();
-        UserModel consult = UserModel.builder().email("consulta@gmail.com").password("12345").build();
-        userRepository.saveAll(List.of(admin, consult));
-
-        RoleModel roleAdmin = RoleModel.builder().name("ROLE_ADMIN").build();
-        RoleModel roleUser = RoleModel.builder().name("ROLE_USER").build();
-        */
         List<ExchangeRateModel> exchangeRateModelList = List.of(
                 // 25/04/2022
                 ExchangeRateModel.builder().day("25042022").baseCurrency("USD").exchangeCurrency("PEN").rateAmount(3.76976).build(),

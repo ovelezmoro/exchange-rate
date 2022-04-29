@@ -1,4 +1,4 @@
-package com.neoris.service.tecnicalchallenge.config;
+package com.neoris.service.tecnicalchallenge.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

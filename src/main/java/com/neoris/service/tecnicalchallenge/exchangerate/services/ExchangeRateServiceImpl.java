@@ -6,11 +6,14 @@ import static com.neoris.service.tecnicalchallenge.util.ExchangeRateUtil.ENG_FOR
 import static com.neoris.service.tecnicalchallenge.util.ExchangeRateUtil.HRS_FORMAT_DATE;
 import static com.neoris.service.tecnicalchallenge.util.ExchangeRateUtil.DB_FORMAT_DATE;
 
+import com.neoris.service.tecnicalchallenge.exchangerate.models.AuditExchangeRate;
 import com.neoris.service.tecnicalchallenge.exchangerate.models.ExchangeRateModel;
+import com.neoris.service.tecnicalchallenge.exchangerate.repositories.AuditExchangeRateRepository;
 import com.neoris.service.tecnicalchallenge.exchangerate.repositories.ExchangeRateRepository;
 import com.neoris.service.tecnicalchallenge.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,6 +28,9 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
     @Autowired
     private ExchangeRateRepository exchangeRateRepository;
+
+    @Autowired
+    private AuditExchangeRateRepository auditExchangeRateRepository;
 
     @Transactional
     @Override
@@ -106,6 +112,17 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         return Mono.justOrEmpty(exchangeRateRepository.findOneByBaseCurrencyAndExchangeCurrencyAndDay(
                         request.getFrom(),
                         request.getTo(), dateToString(new Date(), "ddMMyyyy")))
+                .map(exchangeRateModel -> {
+                    UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                    auditExchangeRateRepository.save(AuditExchangeRate.builder()
+                            .baseCurrency(exchangeRateModel.getBaseCurrency())
+                            .rate(exchangeRateModel.getRateAmount())
+                            .amount(request.getAmount())
+                            .exchangeCurrency(exchangeRateModel.getExchangeCurrency())
+                            .user(principal.getUsername())
+                            .build());
+                    return exchangeRateModel;
+                })
                 .map(exchangeRate -> new ConvertExchangeRateResponse()
                         .updated(dateToString(new Date(), HRS_FORMAT_DATE))
                         .base(exchangeRate.getBaseCurrency())

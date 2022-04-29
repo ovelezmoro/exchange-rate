@@ -1,6 +1,6 @@
 package com.neoris.service.tecnicalchallenge.exchangerate.services;
 
-import com.neoris.service.tecnicalchallenge.config.SecurityUserDetail;
+import com.neoris.service.tecnicalchallenge.security.SecurityUserDetail;
 import com.neoris.service.tecnicalchallenge.model.AuthRequest;
 import com.neoris.service.tecnicalchallenge.model.MessageResponse;
 import com.neoris.service.tecnicalchallenge.model.UserRequest;
