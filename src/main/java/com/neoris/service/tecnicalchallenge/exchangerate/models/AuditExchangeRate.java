@@ -24,4 +24,11 @@ public class AuditExchangeRate  {
     private Double rate;
     private String exchangeCurrency;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.createAt == null) {
+            this.createAt = new Date();
+        }
+    }
+
 }

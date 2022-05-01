@@ -3,12 +3,14 @@ package com.neoris.service.tecnicalchallenge.config;
 import com.neoris.service.tecnicalchallenge.exchangerate.models.ExchangeRateModel;
 import com.neoris.service.tecnicalchallenge.exchangerate.repositories.ExchangeRateRepository;
 import com.neoris.service.tecnicalchallenge.exchangerate.repositories.UserRepository;
+import com.neoris.service.tecnicalchallenge.util.ExchangeRateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -46,11 +48,11 @@ public class InitializeDataSourceConfig implements CommandLineRunner {
                 ExchangeRateModel.builder().day("27042022").baseCurrency("PEN").exchangeCurrency("USD").rateAmount(0.26137).build(),
                 ExchangeRateModel.builder().day("27042022").baseCurrency("USD").exchangeCurrency("EUR").rateAmount(0.94934).build(),
                 ExchangeRateModel.builder().day("27042022").baseCurrency("EUR").exchangeCurrency("USD").rateAmount(1.05337).build(),
-                //28/04/2022
-                ExchangeRateModel.builder().day("28042022").baseCurrency("USD").exchangeCurrency("PEN").rateAmount(3.82376).build(),
-                ExchangeRateModel.builder().day("28042022").baseCurrency("PEN").exchangeCurrency("USD").rateAmount(0.26148).build(),
-                ExchangeRateModel.builder().day("28042022").baseCurrency("USD").exchangeCurrency("EUR").rateAmount(0.95182).build(),
-                ExchangeRateModel.builder().day("28042022").baseCurrency("EUR").exchangeCurrency("USD").rateAmount(1.05074).build()
+                //Hoy
+                ExchangeRateModel.builder().day(ExchangeRateUtil.dateToString(new Date(), "ddMMyyyy")).baseCurrency("USD").exchangeCurrency("PEN").rateAmount(3.82376).build(),
+                ExchangeRateModel.builder().day(ExchangeRateUtil.dateToString(new Date(), "ddMMyyyy")).baseCurrency("PEN").exchangeCurrency("USD").rateAmount(0.26148).build(),
+                ExchangeRateModel.builder().day(ExchangeRateUtil.dateToString(new Date(), "ddMMyyyy")).baseCurrency("USD").exchangeCurrency("EUR").rateAmount(0.95182).build(),
+                ExchangeRateModel.builder().day(ExchangeRateUtil.dateToString(new Date(), "ddMMyyyy")).baseCurrency("EUR").exchangeCurrency("USD").rateAmount(1.05074).build()
 
                 //ExchangeRate.builder().day("25042022").baseCurrency("USD").exchangeCurrency("MXN").rateAmount(20.31475).build(),
                 //ExchangeRate.builder().day("25042022").baseCurrency("USD").exchangeCurrency("JPY").rateAmount(127.93103).build(),

@@ -55,10 +55,10 @@ public class JwtWebFilter implements WebFilter {
 
         String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (auth == null) {
-            return this.writeErrorMessage(response, HttpStatus.NOT_ACCEPTABLE, "No hay token");
+            return this.writeErrorMessage(response, HttpStatus.NOT_ACCEPTABLE, "No existe Token.");
         }
         else if (!auth.startsWith(ExchangeRateConstants.TOKEN_PREFIX)) {
-            return this.writeErrorMessage(response, HttpStatus.NOT_ACCEPTABLE, "Token no" + ExchangeRateConstants.TOKEN_PREFIX + "Comienzo");
+            return this.writeErrorMessage(response, HttpStatus.NOT_ACCEPTABLE, "Token no contiene" + ExchangeRateConstants.TOKEN_PREFIX);
         }
 
         String token = auth.replace(ExchangeRateConstants.TOKEN_PREFIX, StringUtil.EMPTY_STRING);

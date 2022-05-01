@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.security.Principal;
+
 @Slf4j
 @Component
 public class SecurityContextRepository implements ServerSecurityContextRepository {

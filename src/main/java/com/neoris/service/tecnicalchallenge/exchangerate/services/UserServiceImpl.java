@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<SecurityUserDetail> validUser(AuthRequest request) {
-        return Mono.just(userRepository.findOneByEmail(request.getEmail()))
+        return Mono.justOrEmpty(userRepository.findOneByEmail(request.getEmail()))
                 .filter(model -> passwordEncoder.matches(request.getPassword(), model.getPassword()))
                 .map(model -> SecurityUserDetail.builder()
                         .username(model.getEmail())
