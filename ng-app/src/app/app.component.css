@@ -1,0 +1,26 @@
+span.emoji {
+    font-size: 25px;
+    vertical-align: middle;
+    line-height: 2;
+    display: contents;
+  }
+
+  div.jumresponse {
+    padding: 10px;
+    background-color: #EEE;
+    height: 12rem;
+    border-radius: 5px;
+  }
+
+  div.jumresponse .response {
+    margin-top: 2rem; text-align: center; font-size: 3rem
+  }
+
+  div.jumresponse .response .response-label{
+    display: block; font-size: 0.8rem; color: red  
+}
+
+.btn-convert{
+    width: 100%;
+    height: 100%
+}

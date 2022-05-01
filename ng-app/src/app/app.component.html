@@ -1,0 +1,161 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img
+        src="assets/images/298-coins-outline.gif"
+        alt=""
+        width="30"
+        class="d-inline-block align-text-top"
+      />
+      RT-TC
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="#">Convertir</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav d-flex">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="#" (click)="logout()">Salir</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-lg-12">
+      <!--<div><img src="assets/images/bolsa-dinero.png" alt="" srcset=""></div>-->
+      <div class="alert alert-primary" role="alert">
+        <strong>Bienvenido,</strong> Este es un convertir de tipo de cambio.<br />preciona
+        el icono 🔁 para que las monedas cambien de casilla.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <form class="row">
+        <div class="mb-3 col-lg-6">
+          <span
+            style="
+              display: block;
+              float: right;
+              cursor: pointer;
+              font-size: 1.2rem;
+            "
+            (click)="changeInputs()"
+            >🔁</span
+          >
+          <label for="baseCurrency" class="form-label">Moneda Base </label>
+          <input
+            [(ngModel)]="baseCurrency"
+            type="text"
+            class="form-control"
+            name="baseCurrency"
+            id="baseCurrency"
+            placeholder="Moneda a Vender, Eje. USD"
+          />
+        </div>
+        <div class="mb-3 col-lg-6">
+          <label for="exchangeCurrenty" class="form-label"
+            >Moneda a Comprar</label
+          >
+          <input
+            [(ngModel)]="exchangeCurrenty"
+            type="text"
+            class="form-control"
+            name="exchangeCurrenty"
+            id="exchangeCurrenty"
+            placeholder="Moneda a Comprar, Eje. PEN"
+          />
+        </div>
+        <div class="mb-3 col-lg-6">
+          <label for="amout" class="form-label">Monto</label>
+          <input
+            [(ngModel)]="amout"
+            type="number"
+            class="form-control"
+            name="amout"
+            id="amout"
+            placeholder="Monto a Vender, Eje. 10.5"
+          />
+        </div>
+        <div class="mb-3 col-lg-6">
+          <button
+            type="submit"
+            class="btn btn-primary btn-convert"
+            (click)="convert()"
+          >
+            Convertir
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-6">
+      <div class="jumresponse">
+        <p class="response" *ngIf="exchangeRateResponse">
+          {{exchangeRateResponse.money}} {{exchangeRateResponse.amount}}
+          <label class="response-label">Tipo de Cambio: {{exchangeRateResponse.rate}}</label>
+          <label class="response-label">1 {{baseCurrency}} equivale a {{exchangeRateResponse.rate}} {{exchangeCurrenty}}</label>
+
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Autenticación</h4>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          [(ngModel)]="login.username"
+          aria-describedby="emailHelp"
+        />
+        <div id="emailHelp" class="form-text">
+          Nunca compartiremos su correo electrónico con nadie más.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          [(ngModel)]="login.password"
+        />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="authentication()"
+    >
+      Ingresar
+    </button>
+  </div>
+</ng-template>
